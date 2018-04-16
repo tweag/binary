@@ -267,7 +267,7 @@ instance Alternative Get where
       Fail _ _ -> pushBack bs >> g
       _ -> error "Binary: impossible"
   {-# INLINE (<|>) #-}
-  some p = (:) <$> p <*> many p
+  some p = (\a b -> (:) a b) <$> p <*> many p
   {-# INLINE some #-}
   many p = do
     v <- (Just <$> p) <|> pure Nothing

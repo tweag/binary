@@ -49,7 +49,7 @@ instance (GBinaryPut a, GBinaryPut b) => GBinaryPut (a :*: b) where
     gput (x :*: y) = gput x <> gput y
 
 instance (GBinaryGet a, GBinaryGet b) => GBinaryGet (a :*: b) where
-    gget = (:*:) <$> gget <*> gget
+    gget = (\a b -> (:*:) a b) <$> gget <*> gget
 
 -- Metadata (constructor name, etc)
 instance GBinaryPut a => GBinaryPut (M1 i c a) where

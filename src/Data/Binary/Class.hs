@@ -730,7 +730,7 @@ instance Binary Fingerprint where
 -- | /Since: 0.8.0.0/
 instance Binary Version where
     put (Version br tags) = put br <> put tags
-    get = Version <$> get <*> get
+    get = (\a b -> Version a b) <$> get <*> get
 
 ------------------------------------------------------------------------
 -- Data.Monoid datatypes
@@ -877,7 +877,7 @@ instance Binary RuntimeRep where
     get = do
         tag <- getWord8
         case tag of
-          0  -> VecRep <$> get <*> get
+          0  -> (\a b -> VecRep a b) <$> get <*> get
           1  -> TupleRep <$> get
           2  -> SumRep <$> get
           3  -> pure LiftedRep
@@ -913,10 +913,10 @@ instance Binary KindRep where
     get = do
         tag <- getWord8
         case tag of
-          0 -> KindRepTyConApp <$> get <*> get
+          0 -> (\a b -> KindRepTyConApp a b) <$> get <*> get
           1 -> KindRepVar <$> get
-          2 -> KindRepApp <$> get <*> get
-          3 -> KindRepFun <$> get <*> get
+          2 -> (\a b -> KindRepApp a b) <$> get <*> get
+          3 -> (\a b -> KindRepFun a b) <$> get <*> get
           4 -> KindRepTYPE <$> get
           5 -> KindRepTypeLit <$> get <*> get
           _ -> fail "GHCi.TH.Binary.putKindRep: invalid tag"
